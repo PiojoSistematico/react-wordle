@@ -2,6 +2,7 @@ import Square from "./Square";
 
 type WordProps = {
   word: string[];
+  wordArray: any[];
   attempts: number;
   handleOnChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 };
@@ -73,6 +74,7 @@ const Word: React.FunctionComponent<WordProps> = ({
   word,
   attempts,
   handleOnChange,
+  wordArray,
 }) => {
   return (
     <section className="word-section">
@@ -81,6 +83,7 @@ const Word: React.FunctionComponent<WordProps> = ({
           key={index}
           index={index}
           word={word}
+          wordArray={wordArray}
           letter={letter}
           attempts={attempts}
           handleOnChange={handleOnChange}
