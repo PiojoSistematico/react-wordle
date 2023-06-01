@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Word from "./Word";
 import Board from "./Board";
 
@@ -15,6 +15,32 @@ const Game = () => {
   );
   const [attempts, setAttempts] = useState(0);
 
+  /* const inputRef = Array(maxAttempts)
+    .fill(undefined)
+    .map(() => Array(wordLength).fill(useRef())); */
+
+  // Create a matrix of refs using useRef
+  const inputRef = useRef<React.RefObject<HTMLInputElement>[][] | null>(null);
+
+  // Initialize the matrix of refs
+  useEffect(() => {
+    inputRef.current = Array.from(Array(maxAttempts), () =>
+      Array(wordLength).fill(null)
+    );
+  }, [maxAttempts, wordLength]);
+
+  // Focus the first input element
+  useEffect(() => {
+    if (
+      inputRef.current &&
+      inputRef.current[0] &&
+      inputRef.current[0][0] &&
+      inputRef.current[0][0].current
+    ) {
+      inputRef.current[0][0].current.focus();
+    }
+  }, []);
+
   useEffect(() => {
     fetch(`https://random-word-api.vercel.app/api?words=1&length=${wordLength}`)
       .then((res) => res.json())
@@ -27,7 +53,7 @@ const Game = () => {
     /* console.log(event.target.value);
     console.log(event.target.name); */
 
-    console.log(event.target);
+    console.log(event.target.name);
 
     /* if the square has been selected do nothing */
     /* if (keyboardArray[index]) return; */
@@ -47,78 +73,13 @@ const Game = () => {
       newWordArray[attempts][position] = "Included";
     }
 
-    /* Check if the letter is in the password */
-
-    /* if (word.includes(letter)) {
-      newKeyboardArray[index] = "Right";
-      for (let i = 0; i < word.toString().length; i++) {
-        if (word.toString().charAt(i) == letter) newWordArray[i] = "Right";
-      }
-    } else {
-      newKeyboardArray[index] = "Wrong";
-      setAttempts((current) => current - 1);
-    }
-    setKeyboardArray(newKeyboardArray);*/
     setWordArray(newWordArray);
-
-    /* console.log(newKeyboardArray);
-    console.log(newWordArray); */
-
-    /* if the current move is a  */
-    /* if (calculateWinner(newSquares)) return;
-    setIsXNext(!isXNext); */
-
-    /* Passing the focus to the next input field */
-    /* if (position <= 3) {
-      event.target.nextElementSibling.focus();
-    } else {
-      setAttempts((prev) => prev + 1);
-    } */
-
-    /* if (length >= 1) {
-      inputRef.current.disabled = true;
-      if (inputRef.current.nextElementSibling) {
-        inputRef.current.nextElementSibling.focus();
-      }
-    } */
   }
 
   /* refresh page for a new game */
-  /* function refreshPage() {
+  function refreshPage() {
     window.location.reload();
-  }*/
-
-  /* const [isXNext, setIsXNext] = useState(true);
-  const [squares, setSquares] = useState(Array(9).fill(null)); */
-
-  /* calculate a winner from the current set of values of squares */
-  /* const isThereAWinner = calculateWinner(squares); */
-
-  /* if there is a winner change the h1 and add a new game button */
-  /* let header;
-  if (isThereAWinner) {
-    header = (
-      <>
-        <p>
-          The winner is{" "}
-          <span className={isXNext ? "x-symbol" : "o-symbol"}>
-            {isXNext ? "X" : "O"}
-          </span>
-        </p>
-        <button onClick={() => refreshPage()}>New game</button>
-      </>
-    );
-  } else { */
-  /* if there is not a winner show the next move */
-  /* header = (
-      <p>
-        Next player{" "}
-        <span className={isXNext ? "x-symbol" : "o-symbol"}>
-          {isXNext ? "X" : "O"}
-        </span>
-      </p>
-    );
-  } */
+  }
 
   return (
     <main>
@@ -128,6 +89,7 @@ const Game = () => {
         wordArray={wordArray}
         attempts={attempts}
         handleOnChange={handleOnChange}
+        inputRef={inputRef}
       ></Board>
     </main>
   );

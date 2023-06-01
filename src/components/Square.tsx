@@ -1,43 +1,44 @@
 type SquareProps = {
-  index: number;
+  level: number;
+  column: number;
   word: string[];
   wordArray: any[];
   letter: string;
   attempts: number;
   handleOnChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  inputRef: any;
 };
 
-import React, { useRef } from "react";
-
 const Square: React.FunctionComponent<SquareProps> = ({
-  index,
+  level,
+  column,
   word,
   wordArray,
   letter,
   attempts,
   handleOnChange,
+  inputRef,
 }) => {
-  const inputRef = useRef(null);
-
-  return (
+  /* console.log(level, column); */
+  return inputRef.current ? (
     <>
       <input
         className={
-          wordArray[index] == "Right"
+          wordArray[column] == "Right"
             ? "square right"
-            : wordArray[index] == "Included"
+            : wordArray[column] == "Included"
             ? "square included"
             : "square"
         }
         type="text"
-        name={index.toString()}
-        placeholder={letter}
+        name={`${level}${column}`}
+        placeholder={`${level}${column}`}
         maxLength={1}
         onChange={handleOnChange}
-        ref={inputRef}
+        ref={(elem) => (inputRef.current[level][column] = elem)}
       />
     </>
-  );
+  ) : null;
 };
 
 export default Square;
