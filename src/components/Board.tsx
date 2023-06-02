@@ -1,11 +1,12 @@
 import Word from "./Word";
+import { RefObject } from "react";
 
 type BoardProps = {
   word: string[];
   wordArray: any[];
   attempts: number;
   handleOnChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  refs: any;
+  refs: RefObject<{ [key: string]: any }>;
 };
 
 const Board: React.FunctionComponent<BoardProps> = ({

@@ -1,7 +1,7 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, RefObject } from "react";
 import Word from "./Word";
 import Board from "./Board";
-import calculateNextElemnt from "../helpers/calculateNextElement";
+import calculateNextElement from "../helpers/calculateNextElement";
 
 /* import wordList from "../wordsapi_sample.json"; */
 
@@ -17,11 +17,16 @@ const Game = () => {
   const [attempts, setAttempts] = useState(0);
 
   // Create object to hold the refs for each input
-  const refs = useRef({});
+  const refs: RefObject<{ [key: string]: any }> = useRef({});
 
-  // Focus the first input element
+  // Enable and Focus the first input element
   useEffect(() => {
-    refs.current["00"].focus();
+    const firstInputRef =
+      refs.current && (refs.current["00"] as HTMLInputElement);
+    if (firstInputRef) {
+      firstInputRef.focus();
+      firstInputRef.disabled = false;
+    }
   }, []);
 
   useEffect(() => {
@@ -33,8 +38,8 @@ const Game = () => {
 
   /* handle on change on input */
   function handleOnChange(event: React.ChangeEvent<HTMLInputElement>): void {
-    /* console.log(event.target.value);
-    console.log(event.target.name); */
+    console.log(event.target);
+    /*console.log(event.target.name); */
 
     console.log(event.target.name);
 
@@ -55,8 +60,21 @@ const Game = () => {
 
     setWordArray(newWordArray);
 
-    //Moving the focus to the next input
-    refs.current[calculateNextElemnt(5, event.target.name)].focus();
+    //disable the current input
+    const currentInputRef =
+      refs.current && (refs.current[event.target.name] as HTMLInputElement);
+    if (currentInputRef) {
+      currentInputRef.disabled = true;
+    }
+
+    //enable and moving the focus to the next input
+    const inputName: string = calculateNextElement(5, event.target.name);
+    const nextInputRef =
+      refs.current && (refs.current[inputName] as HTMLInputElement);
+    if (nextInputRef) {
+      nextInputRef.disabled = false;
+      nextInputRef.focus();
+    }
   }
 
   /* refresh page for a new game */

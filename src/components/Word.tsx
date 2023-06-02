@@ -1,4 +1,5 @@
 import Square from "./Square";
+import { RefObject } from "react";
 
 type WordProps = {
   level: number;
@@ -6,8 +7,7 @@ type WordProps = {
   wordArray: any[];
   attempts: number;
   handleOnChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  /* inputRef: React.RefObject<HTMLInputElement>[][]; */
-  refs: any;
+  refs: RefObject<{ [key: string]: any }>;
 };
 
 const Word: React.FunctionComponent<WordProps> = ({

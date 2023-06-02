@@ -1,3 +1,5 @@
+import { RefObject } from "react";
+
 type SquareProps = {
   level: number;
   column: number;
@@ -6,7 +8,7 @@ type SquareProps = {
   letter: string;
   attempts: number;
   handleOnChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  refs: any;
+  refs: RefObject<{ [key: string]: any }>;
 };
 
 const Square: React.FunctionComponent<SquareProps> = ({
@@ -19,7 +21,6 @@ const Square: React.FunctionComponent<SquareProps> = ({
   handleOnChange,
   refs,
 }) => {
-  /* console.log(level, column); */
   return refs.current ? (
     <>
       <input
@@ -35,7 +36,12 @@ const Square: React.FunctionComponent<SquareProps> = ({
         placeholder={letter}
         maxLength={1}
         onChange={handleOnChange}
-        ref={(el) => (refs.current[`${level}${column}`] = el)}
+        ref={(el) => {
+          if (refs.current) {
+            refs.current[`${level}${column}`] = el;
+          }
+        }}
+        disabled={true}
       />
     </>
   ) : null;
