@@ -7,7 +7,7 @@ type WordProps = {
   attempts: number;
   handleOnChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   /* inputRef: React.RefObject<HTMLInputElement>[][]; */
-  inputRef: any;
+  refs: any;
 };
 
 const Word: React.FunctionComponent<WordProps> = ({
@@ -16,7 +16,7 @@ const Word: React.FunctionComponent<WordProps> = ({
   attempts,
   handleOnChange,
   wordArray,
-  inputRef,
+  refs,
 }) => {
   return (
     <section className="word-section">
@@ -30,7 +30,7 @@ const Word: React.FunctionComponent<WordProps> = ({
           letter={letter}
           attempts={attempts}
           handleOnChange={handleOnChange}
-          inputRef={inputRef}
+          refs={refs}
         ></Square>
       ))}
     </section>

@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import Word from "./Word";
 import Board from "./Board";
+import calculateNextElemnt from "../helpers/calculateNextElement";
 
 /* import wordList from "../wordsapi_sample.json"; */
 
@@ -15,30 +16,12 @@ const Game = () => {
   );
   const [attempts, setAttempts] = useState(0);
 
-  /* const inputRef = Array(maxAttempts)
-    .fill(undefined)
-    .map(() => Array(wordLength).fill(useRef())); */
-
-  // Create a matrix of refs using useRef
-  const inputRef = useRef<React.RefObject<HTMLInputElement>[][] | null>(null);
-
-  // Initialize the matrix of refs
-  useEffect(() => {
-    inputRef.current = Array.from(Array(maxAttempts), () =>
-      Array(wordLength).fill(null)
-    );
-  }, [maxAttempts, wordLength]);
+  // Create object to hold the refs for each input
+  const refs = useRef({});
 
   // Focus the first input element
   useEffect(() => {
-    if (
-      inputRef.current &&
-      inputRef.current[0] &&
-      inputRef.current[0][0] &&
-      inputRef.current[0][0].current
-    ) {
-      inputRef.current[0][0].current.focus();
-    }
+    refs.current["00"].focus();
   }, []);
 
   useEffect(() => {
@@ -54,9 +37,6 @@ const Game = () => {
     console.log(event.target.name); */
 
     console.log(event.target.name);
-
-    /* if the square has been selected do nothing */
-    /* if (keyboardArray[index]) return; */
 
     /* create a copy of the array to modify */
     let newWordArray = wordArray.slice();
@@ -74,6 +54,9 @@ const Game = () => {
     }
 
     setWordArray(newWordArray);
+
+    //Moving the focus to the next input
+    refs.current[calculateNextElemnt(5, event.target.name)].focus();
   }
 
   /* refresh page for a new game */
@@ -89,7 +72,7 @@ const Game = () => {
         wordArray={wordArray}
         attempts={attempts}
         handleOnChange={handleOnChange}
-        inputRef={inputRef}
+        refs={refs}
       ></Board>
     </main>
   );

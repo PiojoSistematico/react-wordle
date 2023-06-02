@@ -5,7 +5,7 @@ type BoardProps = {
   wordArray: any[];
   attempts: number;
   handleOnChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  inputRef: any;
+  refs: any;
 };
 
 const Board: React.FunctionComponent<BoardProps> = ({
@@ -13,7 +13,7 @@ const Board: React.FunctionComponent<BoardProps> = ({
   attempts,
   handleOnChange,
   wordArray,
-  inputRef,
+  refs,
 }) => {
   return (
     <section className="board-section">
@@ -25,7 +25,7 @@ const Board: React.FunctionComponent<BoardProps> = ({
           wordArray={wordArray[index]}
           attempts={attempts}
           handleOnChange={handleOnChange}
-          inputRef={inputRef}
+          refs={refs}
         ></Word>
       ))}
       {/* <Word

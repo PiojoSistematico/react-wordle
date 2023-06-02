@@ -6,7 +6,7 @@ type SquareProps = {
   letter: string;
   attempts: number;
   handleOnChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  inputRef: any;
+  refs: any;
 };
 
 const Square: React.FunctionComponent<SquareProps> = ({
@@ -17,10 +17,10 @@ const Square: React.FunctionComponent<SquareProps> = ({
   letter,
   attempts,
   handleOnChange,
-  inputRef,
+  refs,
 }) => {
   /* console.log(level, column); */
-  return inputRef.current ? (
+  return refs.current ? (
     <>
       <input
         className={
@@ -32,10 +32,10 @@ const Square: React.FunctionComponent<SquareProps> = ({
         }
         type="text"
         name={`${level}${column}`}
-        placeholder={`${level}${column}`}
+        placeholder={letter}
         maxLength={1}
         onChange={handleOnChange}
-        ref={(elem) => (inputRef.current[level][column] = elem)}
+        ref={(el) => (refs.current[`${level}${column}`] = el)}
       />
     </>
   ) : null;
