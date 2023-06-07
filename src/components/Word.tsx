@@ -5,7 +5,6 @@ type WordProps = {
   level: number;
   word: string[];
   wordArray: any[];
-  attempts: number;
   handleOnChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   refs: RefObject<{ [key: string]: any }>;
 };
@@ -13,7 +12,6 @@ type WordProps = {
 const Word: React.FunctionComponent<WordProps> = ({
   level,
   word,
-  attempts,
   handleOnChange,
   wordArray,
   refs,
@@ -25,10 +23,7 @@ const Word: React.FunctionComponent<WordProps> = ({
           key={index}
           level={level}
           column={index}
-          word={word}
           wordArray={wordArray}
-          letter={letter}
-          attempts={attempts}
           handleOnChange={handleOnChange}
           refs={refs}
         ></Square>

@@ -1,9 +1,8 @@
 import { useState, useEffect, useRef, RefObject } from "react";
-import Word from "./Word";
 import Board from "./Board";
 import calculateNextElement from "../helpers/calculateNextElement";
-
-/* import wordList from "../wordsapi_sample.json"; */
+import calculateWinner from "../helpers/calculateWinner";
+import disableAllElements from "../helpers/disableAllElements";
 
 const Game = () => {
   const maxAttempts: number = 5;
@@ -29,6 +28,7 @@ const Game = () => {
     }
   }, []);
 
+  // Fetching random word
   useEffect(() => {
     fetch(`https://random-word-api.vercel.app/api?words=1&length=${wordLength}`)
       .then((res) => res.json())
@@ -36,22 +36,21 @@ const Game = () => {
       .then((data) => setWord(data.toString().split("")));
   }, []);
 
+  let isThereAWinner: boolean = calculateWinner(wordArray);
+  let header: string = "Guess the word";
+  if (isThereAWinner) header = "Good Guess, try again!!";
+  if (attempts >= 5) header = "Bad Luck, try again!!";
+
   /* handle on change on input */
   function handleOnChange(event: React.ChangeEvent<HTMLInputElement>): void {
-    console.log(event.target);
-    /*console.log(event.target.name); */
-
-    console.log(event.target.name);
-
     /* create a copy of the array to modify */
     let newWordArray = wordArray.slice();
 
     let letter: string = event.target.value;
-    let position: number = Number(event.target.name);
-    let length: number = letter.length;
+    let position: number = Number(event.target.name.slice(-1));
 
-    /* Check if the letter is in the right position */
     if (word[position] == letter) {
+      /* Check if the letter is in the right position */
       newWordArray[attempts][position] = "Right";
     } else if (word.includes(letter)) {
       /* Check if the letter is in the word */
@@ -59,6 +58,8 @@ const Game = () => {
     }
 
     setWordArray(newWordArray);
+
+    if (position == 4) setAttempts((value) => value + 1);
 
     //disable the current input
     const currentInputRef =
@@ -82,13 +83,17 @@ const Game = () => {
     window.location.reload();
   }
 
+  if (isThereAWinner) disableAllElements(refs);
+
   return (
     <main>
-      <h1>hello</h1>
+      <header>
+        <h1>{header}</h1>
+        <button onClick={refreshPage}>New Game</button>
+      </header>
       <Board
         word={word}
         wordArray={wordArray}
-        attempts={attempts}
         handleOnChange={handleOnChange}
         refs={refs}
       ></Board>

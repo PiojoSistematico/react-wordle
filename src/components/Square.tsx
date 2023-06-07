@@ -3,10 +3,7 @@ import { RefObject } from "react";
 type SquareProps = {
   level: number;
   column: number;
-  word: string[];
   wordArray: any[];
-  letter: string;
-  attempts: number;
   handleOnChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   refs: RefObject<{ [key: string]: any }>;
 };
@@ -14,10 +11,7 @@ type SquareProps = {
 const Square: React.FunctionComponent<SquareProps> = ({
   level,
   column,
-  word,
   wordArray,
-  letter,
-  attempts,
   handleOnChange,
   refs,
 }) => {
@@ -33,7 +27,6 @@ const Square: React.FunctionComponent<SquareProps> = ({
         }
         type="text"
         name={`${level}${column}`}
-        placeholder={letter}
         maxLength={1}
         onChange={handleOnChange}
         ref={(el) => {
