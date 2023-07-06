@@ -39,7 +39,8 @@ const Game = () => {
   let isThereAWinner: boolean = calculateWinner(wordArray);
   let header: string = "Guess the word";
   if (isThereAWinner) header = "Good Guess, try again!!";
-  if (attempts >= 5) header = "Bad Luck, try again!!";
+  if (attempts >= 5 && isThereAWinner == false)
+    header = "Bad Luck, try again!!";
 
   /* handle on change on input */
   function handleOnChange(event: React.ChangeEvent<HTMLInputElement>): void {
