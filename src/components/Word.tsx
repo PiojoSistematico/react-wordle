@@ -20,7 +20,7 @@ const Word: React.FunctionComponent<WordProps> = ({
     <section className="word-section">
       {word.map((letter, index) => (
         <Square
-          key={index}
+          key={`${letter}${index}`}
           level={level}
           column={index}
           wordArray={wordArray}

@@ -21,7 +21,7 @@ const Board: React.FunctionComponent<BoardProps> = ({
           key={index}
           level={index}
           word={word}
-          wordArray={wordArray[index]}
+          wordArray={elem}
           handleOnChange={handleOnChange}
           refs={refs}
         ></Word>
