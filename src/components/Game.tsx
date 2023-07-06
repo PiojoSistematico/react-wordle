@@ -17,17 +17,6 @@ const Game = () => {
 
   // Create object to hold the refs for each input
   const refs: RefObject<{ [key: string]: any }> = useRef({});
-
-  // Enable and Focus the first input element
-  useEffect(() => {
-    const firstInputRef =
-      refs.current && (refs.current["00"] as HTMLInputElement);
-    if (firstInputRef) {
-      firstInputRef.focus();
-      firstInputRef.disabled = false;
-    }
-  }, []);
-
   // Fetching random word
   useEffect(() => {
     fetch(`https://random-word-api.vercel.app/api?words=1&length=${wordLength}`)
@@ -35,11 +24,23 @@ const Game = () => {
       .then((data) => setWord(data.toString().split("")));
   }, []);
 
+  // Enable and Focus the first input element
+  useEffect(() => {
+    const firstInputRef =
+      refs.current && (refs.current["00"] as HTMLInputElement | undefined);
+    if (firstInputRef) {
+      firstInputRef.disabled = false;
+      firstInputRef.focus();
+    }
+  }, []);
+
   let isThereAWinner: boolean = calculateWinner(wordArray);
   let header: string = "Guess the word";
-  if (isThereAWinner) header = "Good Guess, try again!!";
-  if (attempts >= 5 && isThereAWinner == false)
-    header = "Bad Luck, try again!!";
+  if (isThereAWinner) {
+    header = "Good Guess, try again!!";
+    disableAllElements(refs);
+  }
+  if (attempts >= 5 && !isThereAWinner) header = "Bad Luck, try again!!";
 
   /* handle on change on input */
   function handleOnChange(event: React.ChangeEvent<HTMLInputElement>): void {
@@ -83,7 +84,7 @@ const Game = () => {
     window.location.reload();
   }
 
-  if (isThereAWinner) disableAllElements(refs);
+  /*   if (isThereAWinner) disableAllElements(refs); */
 
   return (
     <main>

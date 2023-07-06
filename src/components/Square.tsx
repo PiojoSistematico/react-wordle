@@ -34,7 +34,7 @@ const Square: React.FunctionComponent<SquareProps> = ({
             refs.current[`${level}${column}`] = el;
           }
         }}
-        disabled={true}
+        disabled={`${level}${column}` == "00" ? false : true}
       />
     </>
   ) : null;
